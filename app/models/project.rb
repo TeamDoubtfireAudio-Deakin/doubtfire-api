@@ -355,7 +355,7 @@ class Project < ActiveRecord::Base
 
     # Get the weeks between start and end date as an array
     # dates = unit.start_date.to_date.step(unit.end_date.to_date + 1.week, step=7).to_a
-    dates = unit.start_date.to_date.step(unit.end_date.to_date + 1.week, 7).to_a
+    dates = unit.start_date.to_date.step(unit.end_date.to_date + 3.week, 7).to_a
 
     # Setup the dictionaries to contain the keys and values
     # key = series name
@@ -417,8 +417,13 @@ class Project < ActiveRecord::Base
       # add one week's worth of completion data
       projected_remaining -= completion_rate
 
+<<<<<<< HEAD
+      # if target value then its the % remaining only
+      if target_val[1].nil?     then  target_val[1] = 0     else target_val[1] /= total end
+=======
       # if target value then its the %remaining only
       target_val[1].nil? ? (target_val[1] = 0) : (target_val[1] /= total)
+>>>>>>> c7ccaa2882a4a64419cfc2909e1275f998e16b02
       # if no done value then value is 100%, otherwise remaining is the total - %done
       done_val[1] = (done_val[1].nil? ? 1 : (total - done_val[1]) / total)
       complete_val[1].nil? ? (complete_val[1] = 1) : (complete_val[1] = (total - complete_val[1]) / total)
