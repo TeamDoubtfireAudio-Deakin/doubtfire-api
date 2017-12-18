@@ -11,20 +11,16 @@ class UnitSerializer < ActiveModel::Serializer
     object.start_date.to_date
   end
 
-  def end_date 
+  def end_date
     object.end_date.to_date
   end
 
   def my_role_obj
-    if Thread.current[:user]
-      object.role_for(Thread.current[:user])
-    end
+    object.role_for(Thread.current[:user]) if Thread.current[:user]
   end
 
   def my_user_role
-    if Thread.current[:user]
-      Thread.current[:user].role
-    end
+    Thread.current[:user].role if Thread.current[:user]
   end
 
   def role
@@ -40,7 +36,6 @@ class UnitSerializer < ActiveModel::Serializer
     object.learning_outcomes
   end
 
-
   has_many :tutorials
   has_many :task_definitions
   has_many :convenors, serializer: UserUnitRoleSerializer
@@ -55,5 +50,11 @@ class UnitSerializer < ActiveModel::Serializer
 
   def include_staff?
     ([ Role.convenor, :convenor ].include? my_role_obj) || (my_user_role == Role.admin)
+  end
+
+  def filter(keys)
+    keys.delete :convenors unless include_convenors?
+    keys.delete :staff unless include_staff?
+    keys
   end
 end
